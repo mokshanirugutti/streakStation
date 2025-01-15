@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3, 
+    "name": "StreakStation",
+    "version": "1.0",
+    "description": "Get All Your Streak Information at one stop",
+    "permissions": [
+      "activeTab"
+    ],
+    "action": { 
+      "default_popup": "index.html" 
+    }
+  }
