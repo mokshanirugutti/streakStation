@@ -1,4 +1,4 @@
-import { UserData } from "../types";
+import { UserData } from "../../../Backend/src/types";
 // import { calculateCurrentStreak } from "./calculateleetcodeStreak";
 
 
