@@ -46,8 +46,8 @@ const CurrentStreak: React.FC<CurrentStreakProps> = ({ title, username, token })
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className={`p-2 border ${ contributedToday ? 'border-green-500' : 'border-red-500'} shadow-md text-center rounded-md my-3`}>
-      <h1 className="div flex  gap-2"><GithubIcon/> {title} - {streak}</h1>
+    <div className={`p-2 border-2 ${ contributedToday ? 'border-green-500' : 'border-red-500'} shadow-md text-center rounded-md my-3`}>
+      <h1 className="div flex  gap-2"><GithubIcon/> {title} - {streak} 🔥 </h1>
     </div>
   );
 };

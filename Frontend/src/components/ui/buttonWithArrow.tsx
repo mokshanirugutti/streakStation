@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 type ButtonWithArrowProps = {
   title:string;
-  onClick : () => void;
+  onClick? : () => void;
 }
 
 export default function ButtonWithArrow({title, onClick}: ButtonWithArrowProps) {
