@@ -19,7 +19,7 @@ export const getGithubStreak = async (username: string, token: string): Promise<
       body: JSON.stringify({ query }),
     });
 
-    console.log("Response status:", response.status);
+    // console.log("Response status:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -28,10 +28,10 @@ export const getGithubStreak = async (username: string, token: string): Promise<
     }
 
     const data: UserData = await response.json();
-    console.log("Received data:", data);
+    // console.log("Received data:", data);
 
     const streak = calculateCurrentStreak(data);
-    console.log("Calculated streak:", streak);
+    // console.log("Calculated streak:", streak);
 
     return streak;
   } catch (error) {
