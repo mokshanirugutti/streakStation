@@ -34,9 +34,9 @@ export default function GetDetailsPopUp({title}:GetDetailsPopUpProps) {
         <form className="space-y-4">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`${id}-${title}-username`}>username</Label>
+              <Label htmlFor={`${id}-${title}-username`}>{title === 'Github' ? 'Github Username' : 'CSRF Token'}</Label>
               <Input id={`${id}-${title}-username`} 
-                placeholder={`${title} username`} 
+                placeholder={title === 'Github' ? 'Github Username' : 'CSRF Token'} 
                 type="text" 
                 required 
                 onChange={(e) => setUsername(e.target.value)}

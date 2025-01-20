@@ -9,8 +9,9 @@ type CurrentStreakProps = {
   title : string
   username : string;
   token : string
+  endpoint:string;
 }
-const CurrentStreak: React.FC<CurrentStreakProps> = ({ title, username, token }) => {
+const CurrentStreak: React.FC<CurrentStreakProps> = ({ title, username, token,endpoint }) => {
   const [streak, setStreak] = useState<number | null>(null);
   const [contributedToday, setContributedToday] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,7 @@ const CurrentStreak: React.FC<CurrentStreakProps> = ({ title, username, token })
       try {
         setLoading(true);
         if(username && token){
-          const currentStreak = await getStreaks({username, token,endpoint:'githubstreak'});
+          const currentStreak = await getStreaks({username, token,endpoint});
           setStreak(currentStreak.streak);
           setContributedToday(currentStreak.contributedToday);
           console.log('got streak')
@@ -46,8 +47,8 @@ const CurrentStreak: React.FC<CurrentStreakProps> = ({ title, username, token })
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className={`p-2 border-2 ${ contributedToday ? 'border-green-500' : 'border-red-500'} shadow-md text-center rounded-md my-3`}>
-      <h1 className="div flex  gap-2"><GithubIcon/> {title} - {streak} 🔥 </h1>
+    <div className={`p-2 border-2 ${ contributedToday ? 'border-t-green-500 bg-gradient-to-b from-white from-30%  to-green-600' : ' border-t-red-400 bg-gradient-to-b from-white from-30%  to-red-600'} shadow-md text-center rounded-md my-3`}> 
+      <h1 className="div flex  gap-2  text-base font-semibold text-neutral-700 drop-shadow-md"><GithubIcon/> {title} - {streak} 🔥 </h1>
     </div>
   );
 };

@@ -18,7 +18,7 @@ const ShowStreak : React.FC<ShowStreakProps> = ({ title } ) => {
     }
   return (
     <div className='my-3'>
-         <CurrentStreak title={title} username={Username} token={AuthToken}/>
+         <CurrentStreak title={title} username={Username} token={AuthToken} endpoint={`${title}streak`}/>
     </div>
   )
 }

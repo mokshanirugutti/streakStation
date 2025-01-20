@@ -1,17 +1,18 @@
 import { getLeetCodeStreakProps } from "../../types";
-import { calculateLeetcodeStreak } from "./calculateLeetcodeStreak";
+import { checkStreakAcrossMultipleArrays } from "./CountStreakDays"; // Import streak calculation function
+import { extractTimestamps } from "./ExtractTimeStamps";
 
 export const getLeetCodeStreak = async ({
   CSRF_TOKEN,
   AUTH_TOKEN,
-}: getLeetCodeStreakProps): Promise<{ streak: number; todaySubmission: boolean }> => {
+}: getLeetCodeStreakProps): Promise<{ streak: number; contributedToday: boolean }> => {
   try {
     console.log("Fetching LeetCode submissions...");
 
     // Function to fetch submissions in batches
-    const fetchSubmissions = async (): Promise<any> => {
+    const fetchSubmissions = async (offset = 0): Promise<any> => {
       const response = await fetch(
-        `https://leetcode.com/api/submissions/?offset=0&limit=30`,
+        `https://leetcode.com/api/submissions/?offset=${offset}`,
         {
           method: "GET",
           headers: {
@@ -31,59 +32,40 @@ export const getLeetCodeStreak = async ({
       return response.json();
     };
 
-    // let streak = 0;
-    // let todaySubmission = false;
-    // const today = new Date().toDateString();
-    // const submittedDays: Set<string> = new Set(); // Set to track unique days with submissions
-    // let offset = 0;
-    // let hasNext = true;
+    let hasToday = false;
+    let totalStreakCount = 0;
+    let isStreakBroken = false;
+    let offset = 0;
 
-    // Fetch and process submissions in batches
-    const data = await fetchSubmissions();
-    const streakCount = calculateLeetcodeStreak(data)
-    // while (hasNext) {
-    //   console.log('DATA .. #####');
-    //   console.log(data)
-    //   // Safely check for "submissions_dump"
-    //   if (!data || !data["submissions_dump"]) {
-    //     console.warn("Unexpected API response structure:", data);
-    //     break; // Stop fetching if the response structure is invalid
-    //   }
+    // Continue fetching and calculating streak while streak is not broken
+    while (!isStreakBroken) {
+      const data = await fetchSubmissions(offset);
+      console.log("Data received for offset", offset);
 
-    //   const submissions = data["submissions_dump"];
-    //   hasNext = data["has_next"]; // Check if there are more submissions to fetch
+      // Extract timestamps from the fetched data (implement this logic as you see fit)
+      const timestamps: number[] = extractTimestamps(data); 
+      console.log("Extracted timestamps:", timestamps);
 
-    //   for (const submission of submissions) {
-    //     const submissionDate = new Date(submission.timestamp * 1000).toDateString();
+      // Use checkStreakAcrossMultipleArrays to calculate the streak
+      const result = checkStreakAcrossMultipleArrays([timestamps]);
 
-    //     // Check if the submission was made today
-    //     if (submissionDate === today) {
-    //       todaySubmission = true;
-    //     } else if (!submittedDays.has(submissionDate)) {
-    //       // If the date is new and breaks the streak, stop counting
-    //       if (
-    //         streak > 0 &&
-    //         Array.from(submittedDays).some((date) => new Date(date) > new Date(submissionDate))
-    //       ) {
-    //         hasNext = false; // Stop fetching if the streak is broken
-    //         break;
-    //       }
-    //       streak++;
-    //       submittedDays.add(submissionDate);
-    //     }
-    //   }
+      // Update overall streak status
+      hasToday = hasToday || result.hasToday;
+      totalStreakCount += result.totalStreakCount; // Add streak count from the current batch
+      isStreakBroken = result.isStreakBroken;
 
-    //   offset += 40; // Increment offset for the next batch
+      console.log("Current streak result:", result);
 
-    //   // Stop fetching if streak is broken
-    //   if (!hasNext) break;
-    // }
+      // If streak is broken, exit the loop
+      if (isStreakBroken) {
+        break;
+      }
 
-    // console.log("Final streak:", streak);
-    // console.log("Today's submission:", todaySubmission);
+      // Move to the next batch
+      offset += 20; // Update offset for the next API call
+    }
 
-    // return { streak, todaySubmission, };
-    return { streak: streakCount, todaySubmission: false };
+    return { streak: totalStreakCount, contributedToday: hasToday };
   } catch (error) {
     console.error("Error calculating LeetCode streak:", error);
     throw error;

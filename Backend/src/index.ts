@@ -17,8 +17,11 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/githubstreak', async (req, res) => {
+    console.log('got call for github streak')
     const gitUsername : string = req.headers.githubusername as string;
-    const gitToken : string = req.headers.gittoken as string;;
+    const gitToken : string = req.headers.gittoken as string;
+    console.log('github username and token')
+    console.log(gitUsername, gitToken);
     if(!gitUsername || !gitToken){
         res.send({'message':'githubusername or gittoken is missing'});
     }
@@ -28,16 +31,21 @@ app.get('/githubstreak', async (req, res) => {
 })
 
 app.get('/leetcodestreak', async (req, res) => {
-    const CSRF_TOKEN : string = req.headers.csrftoken as string;
-    const AUTH_TOKEN : string = req.headers.leetcodetoken as string;;
-    // console.log(CSRF_TOKEN, AUTH_TOKEN);
+    console.log('got call for leetcode streak')
+
+    const CSRF_TOKEN : string = req.headers.githubusername as string;
+    const AUTH_TOKEN : string = req.headers.gittoken as string;;
+    console.log(req.headers);
+    console.log(CSRF_TOKEN, AUTH_TOKEN);
     // console.log('CALLING LEETCODE CSRF TOKEN')
     // getLeetCodeCsrf();
     if(!CSRF_TOKEN || !AUTH_TOKEN){
         res.send({'message':'CSRF_TOKEN or AUTH_TOKEN is missing'});
     }
     const data =  await  getLeetCodeStreak({CSRF_TOKEN, AUTH_TOKEN});
-    res.send({'Leetcode streak':data});
+    console.log(`res.send data = ` )
+    console.log(data)
+    res.send({'streak':data});
 })
 
 
